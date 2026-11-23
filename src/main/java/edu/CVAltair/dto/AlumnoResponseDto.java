@@ -10,6 +10,7 @@ public record AlumnoResponseDto(
         String email,
         String numeroSeguridadSocial,
         Boolean tutorialCompletado,
-        LocalDate fechaNacimiento
+        LocalDate fechaNacimiento,
+        Long idCV
 ) {
 }

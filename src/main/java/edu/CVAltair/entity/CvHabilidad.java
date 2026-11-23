@@ -20,13 +20,21 @@ public class CvHabilidad {
     @JoinColumn(name = "id_habilidad_tecnica", nullable = false)
     private HabilidadTecnica habilidad;
 
+    @Column(name = "posicion", nullable = false, columnDefinition = "integer default 0")
+    private int posicion;
+
     public CvHabilidad() {
     }
 
     public CvHabilidad(Long idCvHabilidad, CV cv, HabilidadTecnica habilidad) {
+        this(idCvHabilidad, cv, habilidad, 0);
+    }
+
+    public CvHabilidad(Long idCvHabilidad, CV cv, HabilidadTecnica habilidad, int posicion) {
         this.idCvHabilidad = idCvHabilidad;
         this.cv = cv;
         this.habilidad = habilidad;
+        this.posicion = posicion;
     }
 
     public Long getIdCvHabilidad() {
@@ -51,5 +59,13 @@ public class CvHabilidad {
 
     public void setHabilidad(HabilidadTecnica habilidad) {
         this.habilidad = habilidad;
+    }
+
+    public int getPosicion() {
+        return posicion;
+    }
+
+    public void setPosicion(int posicion) {
+        this.posicion = posicion;
     }
 }

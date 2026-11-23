@@ -20,13 +20,21 @@ public class CvFormacion {
     @JoinColumn(name = "id_formacion", nullable = false)
     private Formacion formacion;
 
+    @Column(name = "posicion", nullable = false, columnDefinition = "integer default 0")
+    private int posicion;
+
     public CvFormacion() {
     }
 
     public CvFormacion(Long idCvFormacion, CV cv, Formacion formacion) {
+        this(idCvFormacion, cv, formacion, 0);
+    }
+
+    public CvFormacion(Long idCvFormacion, CV cv, Formacion formacion, int posicion) {
         this.idCvFormacion = idCvFormacion;
         this.cv = cv;
         this.formacion = formacion;
+        this.posicion = posicion;
     }
 
     public Long getIdCvFormacion() {
@@ -51,5 +59,13 @@ public class CvFormacion {
 
     public void setFormacion(Formacion formacion) {
         this.formacion = formacion;
+    }
+
+    public int getPosicion() {
+        return posicion;
+    }
+
+    public void setPosicion(int posicion) {
+        this.posicion = posicion;
     }
 }

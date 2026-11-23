@@ -20,13 +20,21 @@ public class CvIdioma {
     @JoinColumn(name = "id_idioma", nullable = false)
     private Idioma idioma;
 
+    @Column(name = "posicion", nullable = false, columnDefinition = "integer default 0")
+    private int posicion;
+
     public CvIdioma() {
     }
 
     public CvIdioma(Long idCvIdioma, CV cv, Idioma idioma) {
+        this(idCvIdioma, cv, idioma, 0);
+    }
+
+    public CvIdioma(Long idCvIdioma, CV cv, Idioma idioma, int posicion) {
         this.idCvIdioma = idCvIdioma;
         this.cv = cv;
         this.idioma = idioma;
+        this.posicion = posicion;
     }
 
     public Long getIdCvIdioma() {
@@ -51,5 +59,13 @@ public class CvIdioma {
 
     public void setIdioma(Idioma idioma) {
         this.idioma = idioma;
+    }
+
+    public int getPosicion() {
+        return posicion;
+    }
+
+    public void setPosicion(int posicion) {
+        this.posicion = posicion;
     }
 }

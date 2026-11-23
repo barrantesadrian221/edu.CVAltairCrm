@@ -7,9 +7,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CVRepository extends JpaRepository<CV, Long> {
+
+    Optional<CV> findByAlumnoIdAlumno(Long idAlumno);
 
     @Query("""
             select distinct cv

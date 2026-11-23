@@ -20,13 +20,21 @@ public class CvCertificacion {
     @JoinColumn(name = "id_certificacion", nullable = false)
     private Certificacion certificacion;
 
+    @Column(name = "posicion", nullable = false, columnDefinition = "integer default 0")
+    private int posicion;
+
     public CvCertificacion() {
     }
 
     public CvCertificacion(Long idCvCertificacion, CV cv, Certificacion certificacion) {
+        this(idCvCertificacion, cv, certificacion, 0);
+    }
+
+    public CvCertificacion(Long idCvCertificacion, CV cv, Certificacion certificacion, int posicion) {
         this.idCvCertificacion = idCvCertificacion;
         this.cv = cv;
         this.certificacion = certificacion;
+        this.posicion = posicion;
     }
 
     public Long getIdCvCertificacion() {
@@ -51,5 +59,13 @@ public class CvCertificacion {
 
     public void setCertificacion(Certificacion certificacion) {
         this.certificacion = certificacion;
+    }
+
+    public int getPosicion() {
+        return posicion;
+    }
+
+    public void setPosicion(int posicion) {
+        this.posicion = posicion;
     }
 }

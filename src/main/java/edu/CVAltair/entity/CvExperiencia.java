@@ -20,13 +20,21 @@ public class CvExperiencia {
     @JoinColumn(name = "id_experiencia", nullable = false)
     private Experiencia experiencia;
 
+    @Column(name = "posicion", nullable = false, columnDefinition = "integer default 0")
+    private int posicion;
+
     public CvExperiencia() {
     }
 
     public CvExperiencia(Long idCvExperiencia, CV cv, Experiencia experiencia) {
+        this(idCvExperiencia, cv, experiencia, 0);
+    }
+
+    public CvExperiencia(Long idCvExperiencia, CV cv, Experiencia experiencia, int posicion) {
         this.idCvExperiencia = idCvExperiencia;
         this.cv = cv;
         this.experiencia = experiencia;
+        this.posicion = posicion;
     }
 
     public Long getIdCvExperiencia() {
@@ -51,5 +59,13 @@ public class CvExperiencia {
 
     public void setExperiencia(Experiencia experiencia) {
         this.experiencia = experiencia;
+    }
+
+    public int getPosicion() {
+        return posicion;
+    }
+
+    public void setPosicion(int posicion) {
+        this.posicion = posicion;
     }
 }

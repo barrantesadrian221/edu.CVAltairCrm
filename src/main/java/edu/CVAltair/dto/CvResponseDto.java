@@ -9,6 +9,7 @@ public record CvResponseDto(
         List<FormacionResponseDto> formaciones,
         List<HabilidadTecnicaResponseDto> habilidades,
         List<IdiomaResponseDto> idiomas,
-        List<CertificacionResponseDto> certificaciones
+        List<CertificacionResponseDto> certificaciones,
+        List<CvBloqueResponseDto> ordenBloques
 ) {
 }

@@ -20,19 +20,19 @@ public class CV {
         @JoinColumn(name = "id_alumno")
         private Alumno alumno;
 
-        @OneToMany(mappedBy = "cv", fetch = FetchType.LAZY)
+        @OneToMany(mappedBy = "cv", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
         private List<CvExperiencia> experiencias = new ArrayList<>();
 
-        @OneToMany(mappedBy = "cv", fetch = FetchType.LAZY)
+        @OneToMany(mappedBy = "cv", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
         private List<CvFormacion> formaciones = new ArrayList<>();
 
-        @OneToMany(mappedBy = "cv", fetch = FetchType.LAZY)
+        @OneToMany(mappedBy = "cv", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
         private List<CvHabilidad> habilidades = new ArrayList<>();
 
-        @OneToMany(mappedBy = "cv", fetch = FetchType.LAZY)
+        @OneToMany(mappedBy = "cv", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
         private List<CvIdioma> idiomas = new ArrayList<>();
 
-        @OneToMany(mappedBy = "cv", fetch = FetchType.LAZY)
+        @OneToMany(mappedBy = "cv", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
         private List<CvCertificacion> certificaciones = new ArrayList<>();
 
         public Long getIdCV() {
