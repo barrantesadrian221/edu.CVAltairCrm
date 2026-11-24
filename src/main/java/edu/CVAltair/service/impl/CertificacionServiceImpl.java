@@ -14,12 +14,23 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+
+/**
+ * Implementación de los servicios de certificación.
+
+ * @author ABR
+ */
 @Service
 public class CertificacionServiceImpl implements CertificacionService {
 
     private final CertificacionRepository certificacionRepository;
     private final AlumnoRepository alumnoRepository;
 
+    /**
+     * Crea una instancia de certificación.
+     * @param certificacionRepository
+     * @param alumnoRepository
+     */
     public CertificacionServiceImpl(
             CertificacionRepository certificacionRepository,
             AlumnoRepository alumnoRepository) {
@@ -74,6 +85,12 @@ public class CertificacionServiceImpl implements CertificacionService {
         return certificacionRepository.findById(id).map(this::mapToResponseDto);
     }
 
+    /**
+     * Crea certificación con los datos proporcionados.
+     * @param idAlumno
+     * @param datos
+     * @return resultado obtenido al ejecutar la operación.
+     */
     @Override
     @Transactional
     public CertificacionResponseDto crearParaAlumno(Long idAlumno, CertificacionRequestDto datos) {
@@ -87,6 +104,12 @@ public class CertificacionServiceImpl implements CertificacionService {
         return mapToResponseDto(certificacionRepository.save(certificacion));
     }
 
+    /**
+     * Actualiza certificación con los datos proporcionados.
+     * @param id
+     * @param datos
+     * @return resultado obtenido al ejecutar la operación.
+     */
     @Override
     @Transactional
     public CertificacionResponseDto actualizar(Long id, CertificacionRequestDto datos) {
@@ -97,6 +120,10 @@ public class CertificacionServiceImpl implements CertificacionService {
         return mapToResponseDto(certificacionRepository.save(certificacion));
     }
 
+    /**
+     * Elimina certificación según el criterio indicado.
+     * @param id
+     */
     @Override
     @Transactional
     public void eliminar(Long id) {
@@ -105,6 +132,11 @@ public class CertificacionServiceImpl implements CertificacionService {
         certificacionRepository.delete(certificacion);
     }
 
+    /**
+     * Ejecuta la operación «validar datos» para certificación.
+     * @param datos
+     * @throws IllegalArgumentException si se produce una excepción de tipo {@link IllegalArgumentException} durante la operación.
+     */
     private void validarDatos(CertificacionRequestDto datos) {
         if (datos == null) {
             throw new IllegalArgumentException("Los datos de la certificación son obligatorios");
@@ -116,24 +148,46 @@ public class CertificacionServiceImpl implements CertificacionService {
         }
     }
 
+    /**
+     * Ejecuta la operación «validar texto busqueda» para certificación.
+     * @param texto
+     * @param campo
+     * @throws IllegalArgumentException si se produce una excepción de tipo {@link IllegalArgumentException} durante la operación.
+     */
     private void validarTextoBusqueda(String texto, String campo) {
         if (texto == null || texto.isBlank()) {
             throw new IllegalArgumentException("El texto de búsqueda para " + campo + " es obligatorio");
         }
     }
 
+    /**
+     * Ejecuta la operación «validar campo» para certificación.
+     * @param valor
+     * @param nombreCampo
+     * @throws IllegalArgumentException si se produce una excepción de tipo {@link IllegalArgumentException} durante la operación.
+     */
     private void validarCampo(String valor, String nombreCampo) {
         if (valor == null || valor.isBlank()) {
             throw new IllegalArgumentException("El campo " + nombreCampo + " es obligatorio");
         }
     }
 
+    /**
+     * Ejecuta la operación «aplicar datos» para certificación.
+     * @param certificacion
+     * @param datos
+     */
     private void aplicarDatos(Certificacion certificacion, CertificacionRequestDto datos) {
         certificacion.setTitulo(datos.titulo());
         certificacion.setEmision(datos.emision());
         certificacion.setFechaObtencion(datos.fechaObtencion());
     }
 
+    /**
+     * Ejecuta la operación «map to respuesta DTO» para certificación.
+     * @param certificacion
+     * @return resultado obtenido al ejecutar la operación.
+     */
     private CertificacionResponseDto mapToResponseDto(Certificacion certificacion) {
         return new CertificacionResponseDto(
                 certificacion.getIdCertificacion(),

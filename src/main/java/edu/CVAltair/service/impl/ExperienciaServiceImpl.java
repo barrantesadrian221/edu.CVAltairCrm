@@ -14,12 +14,23 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+
+/**
+ * Implementación de los servicios de experiencia.
+
+ * @author ABR
+ */
 @Service
 public class ExperienciaServiceImpl implements ExperienciaService {
 
     private final ExperienciaRepository experienciaRepository;
     private final AlumnoRepository alumnoRepository;
 
+    /**
+     * Crea una instancia de experiencia.
+     * @param experienciaRepository
+     * @param alumnoRepository
+     */
     public ExperienciaServiceImpl(
             ExperienciaRepository experienciaRepository,
             AlumnoRepository alumnoRepository) {
@@ -54,6 +65,12 @@ public class ExperienciaServiceImpl implements ExperienciaService {
         return experienciaRepository.findById(id).map(this::mapToResponseDto);
     }
 
+    /**
+     * Crea experiencia con los datos proporcionados.
+     * @param idAlumno
+     * @param datos
+     * @return resultado obtenido al ejecutar la operación.
+     */
     @Override
     @Transactional
     public ExperienciaResponseDto crearParaAlumno(Long idAlumno, ExperienciaRequestDto datos) {
@@ -67,6 +84,12 @@ public class ExperienciaServiceImpl implements ExperienciaService {
         return mapToResponseDto(experienciaRepository.save(experiencia));
     }
 
+    /**
+     * Actualiza experiencia con los datos proporcionados.
+     * @param id
+     * @param datos
+     * @return resultado obtenido al ejecutar la operación.
+     */
     @Override
     @Transactional
     public ExperienciaResponseDto actualizar(Long id, ExperienciaRequestDto datos) {
@@ -77,6 +100,10 @@ public class ExperienciaServiceImpl implements ExperienciaService {
         return mapToResponseDto(experienciaRepository.save(experiencia));
     }
 
+    /**
+     * Elimina experiencia según el criterio indicado.
+     * @param id
+     */
     @Override
     @Transactional
     public void eliminar(Long id) {
@@ -85,6 +112,11 @@ public class ExperienciaServiceImpl implements ExperienciaService {
         experienciaRepository.delete(experiencia);
     }
 
+    /**
+     * Ejecuta la operación «validar datos» para experiencia.
+     * @param datos
+     * @throws IllegalArgumentException si se produce una excepción de tipo {@link IllegalArgumentException} durante la operación.
+     */
     private void validarDatos(ExperienciaRequestDto datos) {
         if (datos == null) {
             throw new IllegalArgumentException("Los datos de la experiencia son obligatorios");
@@ -94,12 +126,23 @@ public class ExperienciaServiceImpl implements ExperienciaService {
         validarCampo(datos.periodo(), "periodo");
     }
 
+    /**
+     * Ejecuta la operación «validar campo» para experiencia.
+     * @param valor
+     * @param nombreCampo
+     * @throws IllegalArgumentException si se produce una excepción de tipo {@link IllegalArgumentException} durante la operación.
+     */
     private void validarCampo(String valor, String nombreCampo) {
         if (valor == null || valor.isBlank()) {
             throw new IllegalArgumentException("El campo " + nombreCampo + " es obligatorio");
         }
     }
 
+    /**
+     * Ejecuta la operación «aplicar datos» para experiencia.
+     * @param experiencia
+     * @param datos
+     */
     private void aplicarDatos(Experiencia experiencia, ExperienciaRequestDto datos) {
         experiencia.setPuesto(datos.puesto());
         experiencia.setEmpresa(datos.empresa());
@@ -107,6 +150,11 @@ public class ExperienciaServiceImpl implements ExperienciaService {
         experiencia.setDescripcion(datos.descripcion());
     }
 
+    /**
+     * Ejecuta la operación «map to respuesta DTO» para experiencia.
+     * @param experiencia
+     * @return resultado obtenido al ejecutar la operación.
+     */
     private ExperienciaResponseDto mapToResponseDto(Experiencia experiencia) {
         return new ExperienciaResponseDto(
                 experiencia.getIdExperiencia(),

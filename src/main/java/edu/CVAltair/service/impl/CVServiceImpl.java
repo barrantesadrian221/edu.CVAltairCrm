@@ -48,6 +48,12 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
+
+/**
+ * Implementación de los servicios de currículum.
+
+ * @author ABR
+ */
 @Service
 public class CVServiceImpl implements CVService {
 
@@ -59,6 +65,16 @@ public class CVServiceImpl implements CVService {
     private final IdiomaRepository idiomaRepository;
     private final CertificacionRepository certificacionRepository;
 
+    /**
+     * Crea una instancia de currículum.
+     * @param cvRepository
+     * @param alumnoRepository
+     * @param experienciaRepository
+     * @param formacionRepository
+     * @param habilidadRepository
+     * @param idiomaRepository
+     * @param certificacionRepository
+     */
     public CVServiceImpl(
             CVRepository cvRepository,
             AlumnoRepository alumnoRepository,
@@ -76,6 +92,13 @@ public class CVServiceImpl implements CVService {
         this.certificacionRepository = certificacionRepository;
     }
 
+    /**
+     * Crea currículum con los datos proporcionados.
+     * @param idAlumno
+     * @param contenido
+     * @return resultado obtenido al ejecutar la operación.
+     * @throws IllegalArgumentException si se produce una excepción de tipo {@link IllegalArgumentException} durante la operación.
+     */
     @Override
     @Transactional
     public CvResponseDto crearParaAlumno(Long idAlumno, CvContenidoRequestDto contenido) {
@@ -105,6 +128,12 @@ public class CVServiceImpl implements CVService {
         return cvRepository.findByAlumnoIdAlumno(idAlumno).map(this::mapToResponseDto);
     }
 
+    /**
+     * Actualiza currículum con los datos proporcionados.
+     * @param id
+     * @param contenido
+     * @return resultado obtenido al ejecutar la operación.
+     */
     @Override
     @Transactional
     public CvResponseDto actualizarContenido(Long id, CvContenidoRequestDto contenido) {
@@ -115,6 +144,10 @@ public class CVServiceImpl implements CVService {
         return mapToResponseDto(cvRepository.save(cv));
     }
 
+    /**
+     * Elimina currículum según el criterio indicado.
+     * @param id
+     */
     @Override
     @Transactional
     public void eliminar(Long id) {
@@ -154,6 +187,11 @@ public class CVServiceImpl implements CVService {
         return cvs.stream().map(this::mapToResponseDto).toList();
     }
 
+    /**
+     * Ejecuta la operación «reemplazar contenido» para currículum.
+     * @param cv
+     * @param contenido
+     */
     private void reemplazarContenido(CV cv, CvContenidoRequestDto contenido) {
         Long idAlumno = cv.getAlumno().getIdAlumno();
         List<CvBloqueRequestDto> ordenBloques = validarYObtenerOrden(contenido);
@@ -207,6 +245,14 @@ public class CVServiceImpl implements CVService {
                 )));
 
         cv.getFormaciones().clear();
+        cv.getHabilidades().clear();
+        cv.getIdiomas().clear();
+        cv.getCertificaciones().clear();
+
+        if (cv.getIdCV() != null) {
+            cvRepository.flush();
+        }
+
         formaciones.forEach(formacion -> cv.getFormaciones()
                 .add(new CvFormacion(
                         null,
@@ -215,7 +261,6 @@ public class CVServiceImpl implements CVService {
                         obtenerPosicion(posiciones, TipoBloqueCv.FORMACION, formacion.getIdFormacion())
                 )));
 
-        cv.getHabilidades().clear();
         habilidades.forEach(habilidad -> cv.getHabilidades()
                 .add(new CvHabilidad(
                         null,
@@ -224,7 +269,6 @@ public class CVServiceImpl implements CVService {
                         obtenerPosicion(posiciones, TipoBloqueCv.HABILIDAD, habilidad.getIdHabilidadTecnica())
                 )));
 
-        cv.getIdiomas().clear();
         idiomas.forEach(idioma -> cv.getIdiomas()
                 .add(new CvIdioma(
                         null,
@@ -233,7 +277,6 @@ public class CVServiceImpl implements CVService {
                         obtenerPosicion(posiciones, TipoBloqueCv.IDIOMA, idioma.getIdIdioma())
                 )));
 
-        cv.getCertificaciones().clear();
         certificaciones.forEach(certificacion -> cv.getCertificaciones()
                 .add(new CvCertificacion(
                         null,
@@ -243,6 +286,12 @@ public class CVServiceImpl implements CVService {
                 )));
     }
 
+    /**
+     * Ejecuta la operación «validar y obtener orden» para currículum.
+     * @param contenido
+     * @return lista con los registros obtenidos.
+     * @throws IllegalArgumentException si se produce una excepción de tipo {@link IllegalArgumentException} durante la operación.
+     */
     private List<CvBloqueRequestDto> validarYObtenerOrden(CvContenidoRequestDto contenido) {
         List<CvBloqueRequestDto> seleccionados = new ArrayList<>();
         contenido.idsExperiencias().forEach(id -> seleccionados.add(
@@ -274,6 +323,13 @@ public class CVServiceImpl implements CVService {
         return orden;
     }
 
+    /**
+     * Ejecuta la operación «obtener posicion» para currículum.
+     * @param posiciones
+     * @param tipo
+     * @param idElemento
+     * @return resultado obtenido al ejecutar la operación.
+     */
     private int obtenerPosicion(
             Map<CvBloqueRequestDto, Integer> posiciones,
             TipoBloqueCv tipo,
@@ -281,6 +337,16 @@ public class CVServiceImpl implements CVService {
         return posiciones.get(new CvBloqueRequestDto(tipo, idElemento));
     }
 
+    /**
+     * Ejecuta la operación «cargar para alumno» para currículum.
+     * @param ids
+     * @param buscarPorId
+     * @param obtenerIdAlumno
+     * @param idAlumno
+     * @param tipo
+     * @return lista con los registros obtenidos.
+     * @throws IllegalArgumentException si se produce una excepción de tipo {@link IllegalArgumentException} durante la operación.
+     */
     private <T> List<T> cargarParaAlumno(
             List<Long> ids,
             Function<Long, Optional<T>> buscarPorId,
@@ -301,6 +367,11 @@ public class CVServiceImpl implements CVService {
                 .toList();
     }
 
+    /**
+     * Ejecuta la operación «validar contenido» para currículum.
+     * @param contenido
+     * @throws IllegalArgumentException si se produce una excepción de tipo {@link IllegalArgumentException} durante la operación.
+     */
     private void validarContenido(CvContenidoRequestDto contenido) {
         if (contenido == null) {
             throw new IllegalArgumentException("El contenido del CV es obligatorio");
@@ -312,6 +383,12 @@ public class CVServiceImpl implements CVService {
         validarIds(contenido.idsCertificaciones(), "certificaciones");
     }
 
+    /**
+     * Ejecuta la operación «validar ids» para currículum.
+     * @param ids
+     * @param nombreCampo
+     * @throws IllegalArgumentException si se produce una excepción de tipo {@link IllegalArgumentException} durante la operación.
+     */
     private void validarIds(List<Long> ids, String nombreCampo) {
         if (ids == null || ids.stream().anyMatch(Objects::isNull)) {
             throw new IllegalArgumentException("La lista de " + nombreCampo + " es obligatoria y no puede contener null");
@@ -321,14 +398,29 @@ public class CVServiceImpl implements CVService {
         }
     }
 
+    /**
+     * Ejecuta la operación «id del alumno» para currículum.
+     * @param alumno
+     * @return resultado obtenido al ejecutar la operación.
+     */
     private Long idDelAlumno(Alumno alumno) {
         return alumno == null ? null : alumno.getIdAlumno();
     }
 
+    /**
+     * Ejecuta la operación «tiene texto» para currículum.
+     * @param texto
+     * @return true si se cumple la condición comprobada; false en caso contrario.
+     */
     private boolean tieneTexto(String texto) {
         return texto != null && !texto.isBlank();
     }
 
+    /**
+     * Ejecuta la operación «intersectar» para currículum.
+     * @param cvs
+     * @param coincidentes
+     */
     private void intersectar(List<CV> cvs, List<CV> coincidentes) {
         Set<Long> idsCoincidentes = coincidentes.stream()
                 .map(CV::getIdCV)
@@ -336,6 +428,11 @@ public class CVServiceImpl implements CVService {
         cvs.removeIf(cv -> !idsCoincidentes.contains(cv.getIdCV()));
     }
 
+    /**
+     * Ejecuta la operación «map to respuesta DTO» para currículum.
+     * @param cv
+     * @return resultado obtenido al ejecutar la operación.
+     */
     private CvResponseDto mapToResponseDto(CV cv) {
         Alumno alumno = cv.getAlumno();
         AlumnoResponseDto alumnoDto = new AlumnoResponseDto(
@@ -400,6 +497,11 @@ public class CVServiceImpl implements CVService {
         );
     }
 
+    /**
+     * Ejecuta la operación «map to respuesta DTO» para currículum.
+     * @param enlace
+     * @return resultado obtenido al ejecutar la operación.
+     */
     private ExperienciaResponseDto mapToResponseDto(CvExperiencia enlace) {
         Experiencia experiencia = enlace.getExperiencia();
         return new ExperienciaResponseDto(
@@ -411,6 +513,11 @@ public class CVServiceImpl implements CVService {
         );
     }
 
+    /**
+     * Ejecuta la operación «map to respuesta DTO» para currículum.
+     * @param enlace
+     * @return resultado obtenido al ejecutar la operación.
+     */
     private FormacionResponseDto mapToResponseDto(CvFormacion enlace) {
         Formacion formacion = enlace.getFormacion();
         return new FormacionResponseDto(
@@ -422,6 +529,11 @@ public class CVServiceImpl implements CVService {
         );
     }
 
+    /**
+     * Ejecuta la operación «map to respuesta DTO» para currículum.
+     * @param enlace
+     * @return resultado obtenido al ejecutar la operación.
+     */
     private HabilidadTecnicaResponseDto mapToResponseDto(CvHabilidad enlace) {
         HabilidadTecnica habilidad = enlace.getHabilidad();
         return new HabilidadTecnicaResponseDto(
@@ -432,11 +544,21 @@ public class CVServiceImpl implements CVService {
         );
     }
 
+    /**
+     * Ejecuta la operación «map to respuesta DTO» para currículum.
+     * @param enlace
+     * @return resultado obtenido al ejecutar la operación.
+     */
     private IdiomaResponseDto mapToResponseDto(CvIdioma enlace) {
         Idioma idioma = enlace.getIdioma();
         return new IdiomaResponseDto(idioma.getIdIdioma(), idioma.getNombre(), idioma.getNivel());
     }
 
+    /**
+     * Ejecuta la operación «map to respuesta DTO» para currículum.
+     * @param enlace
+     * @return resultado obtenido al ejecutar la operación.
+     */
     private CertificacionResponseDto mapToResponseDto(CvCertificacion enlace) {
         Certificacion certificacion = enlace.getCertificacion();
         return new CertificacionResponseDto(

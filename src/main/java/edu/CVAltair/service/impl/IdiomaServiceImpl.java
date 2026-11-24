@@ -14,12 +14,23 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+
+/**
+ * Implementación de los servicios de idioma.
+
+ * @author ABR
+ */
 @Service
 public class IdiomaServiceImpl implements IdiomaService {
 
     private final IdiomaRepository idiomaRepository;
     private final AlumnoRepository alumnoRepository;
 
+    /**
+     * Crea una instancia de idioma.
+     * @param idiomaRepository
+     * @param alumnoRepository
+     */
     public IdiomaServiceImpl(IdiomaRepository idiomaRepository, AlumnoRepository alumnoRepository) {
         this.idiomaRepository = idiomaRepository;
         this.alumnoRepository = alumnoRepository;
@@ -73,6 +84,12 @@ public class IdiomaServiceImpl implements IdiomaService {
         return idiomaRepository.findById(id).map(this::mapToResponseDto);
     }
 
+    /**
+     * Crea idioma con los datos proporcionados.
+     * @param idAlumno
+     * @param datos
+     * @return resultado obtenido al ejecutar la operación.
+     */
     @Override
     @Transactional
     public IdiomaResponseDto crearParaAlumno(Long idAlumno, IdiomaRequestDto datos) {
@@ -86,6 +103,12 @@ public class IdiomaServiceImpl implements IdiomaService {
         return mapToResponseDto(idiomaRepository.save(idioma));
     }
 
+    /**
+     * Actualiza idioma con los datos proporcionados.
+     * @param id
+     * @param datos
+     * @return resultado obtenido al ejecutar la operación.
+     */
     @Override
     @Transactional
     public IdiomaResponseDto actualizar(Long id, IdiomaRequestDto datos) {
@@ -96,6 +119,10 @@ public class IdiomaServiceImpl implements IdiomaService {
         return mapToResponseDto(idiomaRepository.save(idioma));
     }
 
+    /**
+     * Elimina idioma según el criterio indicado.
+     * @param id
+     */
     @Override
     @Transactional
     public void eliminar(Long id) {
@@ -104,6 +131,11 @@ public class IdiomaServiceImpl implements IdiomaService {
         idiomaRepository.delete(idioma);
     }
 
+    /**
+     * Ejecuta la operación «validar datos» para idioma.
+     * @param datos
+     * @throws IllegalArgumentException si se produce una excepción de tipo {@link IllegalArgumentException} durante la operación.
+     */
     private void validarDatos(IdiomaRequestDto datos) {
         if (datos == null) {
             throw new IllegalArgumentException("Los datos del idioma son obligatorios");
@@ -112,17 +144,33 @@ public class IdiomaServiceImpl implements IdiomaService {
         validarCampo(datos.nivel(), "nivel");
     }
 
+    /**
+     * Ejecuta la operación «validar campo» para idioma.
+     * @param valor
+     * @param nombreCampo
+     * @throws IllegalArgumentException si se produce una excepción de tipo {@link IllegalArgumentException} durante la operación.
+     */
     private void validarCampo(String valor, String nombreCampo) {
         if (valor == null || valor.isBlank()) {
             throw new IllegalArgumentException("El campo " + nombreCampo + " es obligatorio");
         }
     }
 
+    /**
+     * Ejecuta la operación «aplicar datos» para idioma.
+     * @param idioma
+     * @param datos
+     */
     private void aplicarDatos(Idioma idioma, IdiomaRequestDto datos) {
         idioma.setNombre(datos.nombre());
         idioma.setNivel(datos.nivel());
     }
 
+    /**
+     * Ejecuta la operación «map to respuesta DTO» para idioma.
+     * @param idioma
+     * @return resultado obtenido al ejecutar la operación.
+     */
     private IdiomaResponseDto mapToResponseDto(Idioma idioma) {
         return new IdiomaResponseDto(
                 idioma.getIdIdioma(),

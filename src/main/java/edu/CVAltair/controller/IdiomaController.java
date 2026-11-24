@@ -17,21 +17,40 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+
+/**
+ * Controlador REST para la gestión de idioma.
+ * @author ABR
+ */
 @RestController
+
 @RequestMapping("/api/idiomas")
 public class IdiomaController {
 
     private final IdiomaService idiomaService;
 
+    /**
+     * Crea una instancia de idioma.
+     * @param idiomaService
+     */
     public IdiomaController(IdiomaService idiomaService) {
         this.idiomaService = idiomaService;
     }
 
+    /**
+     * Devuelve todos los registros de idiomas.
+     * @return respuesta HTTP con el resultado de la operación.
+     */
     @GetMapping
     public ResponseEntity<List<IdiomaResponseDto>> listarTodos() {
         return ResponseEntity.ok(idiomaService.listarTodos());
     }
 
+    /**
+     * Busca idioma por identificador.
+     * @param id
+     * @return respuesta HTTP con el resultado de la operación.
+     */
     @GetMapping("/{id}")
     public ResponseEntity<IdiomaResponseDto> buscarPorId(@PathVariable Long id) {
         return idiomaService.buscarPorId(id)
@@ -39,16 +58,32 @@ public class IdiomaController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    /**
+     * Ejecuta la operación «listar por alumno» para idioma.
+     * @param idAlumno
+     * @return respuesta HTTP con el resultado de la operación.
+     */
     @GetMapping("/alumno/{idAlumno}")
     public ResponseEntity<List<IdiomaResponseDto>> listarPorAlumno(@PathVariable Long idAlumno) {
         return ResponseEntity.ok(idiomaService.listarPorAlumno(idAlumno));
     }
 
+    /**
+     * Busca idioma por nombre.
+     * @param texto
+     * @return respuesta HTTP con el resultado de la operación.
+     */
     @GetMapping("/nombre")
     public ResponseEntity<List<IdiomaResponseDto>> buscarPorNombre(@RequestParam String texto) {
         return ResponseEntity.ok(idiomaService.buscarPorNombre(texto));
     }
 
+    /**
+     * Busca idioma por nombre y nivel.
+     * @param nombre
+     * @param nivel
+     * @return respuesta HTTP con el resultado de la operación.
+     */
     @GetMapping("/buscar")
     public ResponseEntity<List<IdiomaResponseDto>> buscarPorNombreYNivel(
             @RequestParam String nombre,
@@ -56,6 +91,12 @@ public class IdiomaController {
         return ResponseEntity.ok(idiomaService.buscarPorNombreYNivel(nombre, nivel));
     }
 
+    /**
+     * Crea idioma con los datos proporcionados.
+     * @param idAlumno
+     * @param datos
+     * @return respuesta HTTP con el resultado de la operación.
+     */
     @PostMapping("/alumno/{idAlumno}")
     public ResponseEntity<IdiomaResponseDto> crearParaAlumno(
             @PathVariable Long idAlumno,
@@ -64,6 +105,12 @@ public class IdiomaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevoIdioma);
     }
 
+    /**
+     * Actualiza idioma con los datos proporcionados.
+     * @param id
+     * @param datos
+     * @return respuesta HTTP con el resultado de la operación.
+     */
     @PutMapping("/{id}")
     public ResponseEntity<IdiomaResponseDto> actualizar(
             @PathVariable Long id,
@@ -71,6 +118,11 @@ public class IdiomaController {
         return ResponseEntity.ok(idiomaService.actualizar(id, datos));
     }
 
+    /**
+     * Elimina idioma según el criterio indicado.
+     * @param id
+     * @return respuesta HTTP con el resultado de la operación.
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         idiomaService.eliminar(id);

@@ -9,11 +9,29 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+
+/**
+ * Define el contrato de operaciones relacionado con currículum.
+
+ * @author ABR
+ */
 @Repository
 public interface CVRepository extends JpaRepository<CV, Long> {
 
+
+    /**
+     * Busca currículum por alumno identificador alumno.
+     * @param idAlumno
+     * @return el resultado, si existe un registro que coincide con los criterios indicados.
+     */
     Optional<CV> findByAlumnoIdAlumno(Long idAlumno);
 
+
+    /**
+     * Busca currículum por certificación.
+     * @param titulo
+     * @return lista con los registros obtenidos.
+     */
     @Query("""
             select distinct cv
             from CV cv
@@ -23,6 +41,13 @@ public interface CVRepository extends JpaRepository<CV, Long> {
             """)
     List<CV> findByCertificacion(@Param("titulo") String titulo);
 
+
+    /**
+     * Busca currículum por idioma y nivel.
+     * @param nombre
+     * @param nivel
+     * @return lista con los registros obtenidos.
+     */
     @Query("""
             select distinct cv
             from CV cv
@@ -36,6 +61,12 @@ public interface CVRepository extends JpaRepository<CV, Long> {
             @Param("nivel") String nivel
     );
 
+
+    /**
+     * Busca currículum por habilidad.
+     * @param nombre
+     * @return lista con los registros obtenidos.
+     */
     @Query("""
             select distinct cv
             from CV cv

@@ -2,7 +2,13 @@ package edu.CVAltair.entity;
 
 import jakarta.persistence.*;
 
+
+/**
+ * Representa formación en la aplicación.
+ * @author ABR
+ */
 @Entity
+
 @Table(name = "formaciones")
 public class Formacion {
     @Id
@@ -27,9 +33,20 @@ public class Formacion {
     private Alumno alumno;
 
 
+    /**
+     * Crea una instancia de formación.
+     */
     public Formacion() {
     }
 
+    /**
+     * Crea una instancia de formación.
+     * @param idFormacion
+     * @param titulo
+     * @param centro
+     * @param periodo
+     * @param enCurso
+     */
     public Formacion(Long idFormacion, String titulo, String centro, String periodo, boolean enCurso) {
         this.idFormacion = idFormacion;
         this.titulo = titulo;
@@ -38,50 +55,98 @@ public class Formacion {
         this.enCurso = enCurso;
     }
 
+    /**
+     * Obtiene identificador formación de formación.
+     * @return resultado obtenido al ejecutar la operación.
+     */
     public Long getIdFormacion() {
         return idFormacion;
     }
 
+    /**
+     * Establece identificador formación en formación.
+     * @param idFormacion
+     */
     public void setIdFormacion(Long idFormacion) {
         this.idFormacion = idFormacion;
     }
 
+    /**
+     * Obtiene titulo de formación.
+     * @return resultado obtenido al ejecutar la operación.
+     */
     public String getTitulo() {
         return titulo;
     }
 
+    /**
+     * Establece titulo en formación.
+     * @param titulo
+     */
     public void setTitulo(String titulo) {
         this.titulo = titulo;
     }
 
+    /**
+     * Obtiene centro de formación.
+     * @return resultado obtenido al ejecutar la operación.
+     */
     public String getCentro() {
         return centro;
     }
 
+    /**
+     * Establece centro en formación.
+     * @param centro
+     */
     public void setCentro(String centro) {
         this.centro = centro;
     }
 
+    /**
+     * Obtiene periodo de formación.
+     * @return resultado obtenido al ejecutar la operación.
+     */
     public String getPeriodo() {
         return periodo;
     }
 
+    /**
+     * Establece periodo en formación.
+     * @param periodo
+     */
     public void setPeriodo(String periodo) {
         this.periodo = periodo;
     }
 
+    /**
+     * Obtiene en curso de formación.
+     * @return true si se cumple la condición comprobada; false en caso contrario.
+     */
     public boolean isEnCurso() {
         return enCurso;
     }
 
+    /**
+     * Establece en curso en formación.
+     * @param enCurso
+     */
     public void setEnCurso(boolean enCurso) {
         this.enCurso = enCurso;
     }
 
+    /**
+     * Obtiene alumno de formación.
+     * @return resultado obtenido al ejecutar la operación.
+     */
     public Alumno getAlumno() {
         return alumno;
     }
 
+    /**
+     * Establece alumno en formación.
+     * @param alumno
+     */
     public void setAlumno(Alumno alumno) {
         this.alumno = alumno;
     }

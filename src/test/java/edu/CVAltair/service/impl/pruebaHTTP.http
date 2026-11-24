@@ -10,11 +10,11 @@ POST {{baseUrl}}/api/alumnos
 Content-Type: application/json
 
 {
-  "dni": "12345678A",
-  "nombre": "Carlos",
+  "dni": "12445158A",
+  "nombre": "Juanjo",
   "apellidos": "García Martínez",
-  "email": "carlos.garcia@altair.edu",
-  "numeroSeguridadSocial": "281234567840",
+  "email": "juanjo.garcia@altair.edu",
+  "numeroSeguridadSocial": "181222167840",
   "fechaNacimiento": "2002-05-14",
   "tutorialCompletado": false
 }
@@ -22,7 +22,7 @@ Content-Type: application/json
 ### 2. Listar todos los alumnos -> Esperado: 200 OK
 GET {{baseUrl}}/api/alumnos
 
-### 3. Buscar alumno por ID -> Esperado: 200 OK
+### 3. Buscar alumno recién creado por su ID -> Esperado: 200 OK
 GET {{baseUrl}}/api/alumnos/{{crearAlumno.response.body.$.idAlumno}}
 
 ### 4. Buscar alumno por DNI -> Esperado: 200 OK
@@ -154,7 +154,7 @@ Content-Type: application/json
   "fechaObtencion": "2025-06-20"
 }
 
-### 17. Crear CV vinculado a los elementos del alumno -> Esperado: 201 Created
+### 17. Crear CV vinculado a los elementos del alumno -> 201 si no existe; 409 si ya tiene CV
 # @name crearCv
 POST {{baseUrl}}/api/cvs/alumno/{{crearAlumno.response.body.$.idAlumno}}
 Content-Type: application/json
@@ -174,11 +174,12 @@ Content-Type: application/json
   ]
 }
 
-### 18. Consultar CV por ID -> Esperado: 200 OK
-GET {{baseUrl}}/api/cvs/{{crearCv.response.body.$.idCV}}
-
-### 19. Consultar CV por alumno -> Esperado: 200 OK
+### 18. Consultar CV por alumno -> Esperado: 200 OK
+# @name consultarCvAlumno
 GET {{baseUrl}}/api/cvs/alumno/{{crearAlumno.response.body.$.idAlumno}}
+
+### 19. Consultar CV por ID -> Esperado: 200 OK
+GET {{baseUrl}}/api/cvs/{{consultarCvAlumno.response.body.$.idCV}}
 
 ### 20. Filtrar CV por certificación, habilidad e idioma+nivel -> Esperado: 200 OK
 POST {{baseUrl}}/api/cvs/buscar
@@ -192,7 +193,7 @@ Content-Type: application/json
 }
 
 ### 21. Reemplazar contenido del CV y quitar su experiencia -> Esperado: 200 OK
-PUT {{baseUrl}}/api/cvs/{{crearCv.response.body.$.idCV}}
+PUT {{baseUrl}}/api/cvs/{{consultarCvAlumno.response.body.$.idCV}}
 Content-Type: application/json
 
 {
@@ -210,10 +211,10 @@ Content-Type: application/json
 }
 
 ### 22. Volver a consultar CV y comprobar que experiencias está vacío -> Esperado: 200 OK
-GET {{baseUrl}}/api/cvs/{{crearCv.response.body.$.idCV}}
+GET {{baseUrl}}/api/cvs/{{consultarCvAlumno.response.body.$.idCV}}
 
 ### 23. Eliminar CV -> Esperado: 204 No Content
-DELETE {{baseUrl}}/api/cvs/{{crearCv.response.body.$.idCV}}
+DELETE {{baseUrl}}/api/cvs/{{consultarCvAlumno.response.body.$.idCV}}
 
 ### 24. Eliminar experiencia -> Esperado: 204 No Content
 DELETE {{baseUrl}}/api/experiencias/{{crearExperiencia.response.body.$.idExperiencia}}

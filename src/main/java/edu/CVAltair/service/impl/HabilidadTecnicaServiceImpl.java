@@ -14,12 +14,23 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+
+/**
+ * Implementación de los servicios de habilidad técnica.
+
+ * @author ABR
+ */
 @Service
 public class HabilidadTecnicaServiceImpl implements HabilidadTecnicaService {
 
     private final HabilidadTecnicaRepository habilidadRepository;
     private final AlumnoRepository alumnoRepository;
 
+    /**
+     * Crea una instancia de habilidad técnica.
+     * @param habilidadRepository
+     * @param alumnoRepository
+     */
     public HabilidadTecnicaServiceImpl(
             HabilidadTecnicaRepository habilidadRepository,
             AlumnoRepository alumnoRepository) {
@@ -75,6 +86,12 @@ public class HabilidadTecnicaServiceImpl implements HabilidadTecnicaService {
         return habilidadRepository.findById(id).map(this::mapToResponseDto);
     }
 
+    /**
+     * Crea habilidad técnica con los datos proporcionados.
+     * @param idAlumno
+     * @param datos
+     * @return resultado obtenido al ejecutar la operación.
+     */
     @Override
     @Transactional
     public HabilidadTecnicaResponseDto crearParaAlumno(
@@ -90,6 +107,12 @@ public class HabilidadTecnicaServiceImpl implements HabilidadTecnicaService {
         return mapToResponseDto(habilidadRepository.save(habilidad));
     }
 
+    /**
+     * Actualiza habilidad técnica con los datos proporcionados.
+     * @param id
+     * @param datos
+     * @return resultado obtenido al ejecutar la operación.
+     */
     @Override
     @Transactional
     public HabilidadTecnicaResponseDto actualizar(Long id, HabilidadTecnicaRequestDto datos) {
@@ -100,6 +123,10 @@ public class HabilidadTecnicaServiceImpl implements HabilidadTecnicaService {
         return mapToResponseDto(habilidadRepository.save(habilidad));
     }
 
+    /**
+     * Elimina habilidad técnica según el criterio indicado.
+     * @param id
+     */
     @Override
     @Transactional
     public void eliminar(Long id) {
@@ -108,6 +135,11 @@ public class HabilidadTecnicaServiceImpl implements HabilidadTecnicaService {
         habilidadRepository.delete(habilidad);
     }
 
+    /**
+     * Ejecuta la operación «validar datos» para habilidad técnica.
+     * @param datos
+     * @throws IllegalArgumentException si se produce una excepción de tipo {@link IllegalArgumentException} durante la operación.
+     */
     private void validarDatos(HabilidadTecnicaRequestDto datos) {
         if (datos == null) {
             throw new IllegalArgumentException("Los datos de la habilidad son obligatorios");
@@ -117,12 +149,22 @@ public class HabilidadTecnicaServiceImpl implements HabilidadTecnicaService {
         }
     }
 
+    /**
+     * Ejecuta la operación «aplicar datos» para habilidad técnica.
+     * @param habilidad
+     * @param datos
+     */
     private void aplicarDatos(HabilidadTecnica habilidad, HabilidadTecnicaRequestDto datos) {
         habilidad.setNombre(datos.nombre());
         habilidad.setDescripcion(datos.descripcion());
         habilidad.setDestacada(datos.destacada());
     }
 
+    /**
+     * Ejecuta la operación «map to respuesta DTO» para habilidad técnica.
+     * @param habilidad
+     * @return resultado obtenido al ejecutar la operación.
+     */
     private HabilidadTecnicaResponseDto mapToResponseDto(HabilidadTecnica habilidad) {
         return new HabilidadTecnicaResponseDto(
                 habilidad.getIdHabilidadTecnica(),

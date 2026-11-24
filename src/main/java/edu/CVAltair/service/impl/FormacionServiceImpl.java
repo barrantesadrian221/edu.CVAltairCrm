@@ -14,12 +14,23 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+
+/**
+ * Implementación de los servicios de formación.
+
+ * @author ABR
+ */
 @Service
 public class FormacionServiceImpl implements FormacionService {
 
     private final FormacionRepository formacionRepository;
     private final AlumnoRepository alumnoRepository;
 
+    /**
+     * Crea una instancia de formación.
+     * @param formacionRepository
+     * @param alumnoRepository
+     */
     public FormacionServiceImpl(
             FormacionRepository formacionRepository,
             AlumnoRepository alumnoRepository) {
@@ -54,6 +65,12 @@ public class FormacionServiceImpl implements FormacionService {
         return formacionRepository.findById(id).map(this::mapToResponseDto);
     }
 
+    /**
+     * Crea formación con los datos proporcionados.
+     * @param idAlumno
+     * @param datos
+     * @return resultado obtenido al ejecutar la operación.
+     */
     @Override
     @Transactional
     public FormacionResponseDto crearParaAlumno(Long idAlumno, FormacionRequestDto datos) {
@@ -67,6 +84,12 @@ public class FormacionServiceImpl implements FormacionService {
         return mapToResponseDto(formacionRepository.save(formacion));
     }
 
+    /**
+     * Actualiza formación con los datos proporcionados.
+     * @param id
+     * @param datos
+     * @return resultado obtenido al ejecutar la operación.
+     */
     @Override
     @Transactional
     public FormacionResponseDto actualizar(Long id, FormacionRequestDto datos) {
@@ -77,6 +100,10 @@ public class FormacionServiceImpl implements FormacionService {
         return mapToResponseDto(formacionRepository.save(formacion));
     }
 
+    /**
+     * Elimina formación según el criterio indicado.
+     * @param id
+     */
     @Override
     @Transactional
     public void eliminar(Long id) {
@@ -85,6 +112,11 @@ public class FormacionServiceImpl implements FormacionService {
         formacionRepository.delete(formacion);
     }
 
+    /**
+     * Ejecuta la operación «validar datos» para formación.
+     * @param datos
+     * @throws IllegalArgumentException si se produce una excepción de tipo {@link IllegalArgumentException} durante la operación.
+     */
     private void validarDatos(FormacionRequestDto datos) {
         if (datos == null) {
             throw new IllegalArgumentException("Los datos de la formación son obligatorios");
@@ -94,12 +126,23 @@ public class FormacionServiceImpl implements FormacionService {
         validarCampo(datos.periodo(), "periodo");
     }
 
+    /**
+     * Ejecuta la operación «validar campo» para formación.
+     * @param valor
+     * @param nombreCampo
+     * @throws IllegalArgumentException si se produce una excepción de tipo {@link IllegalArgumentException} durante la operación.
+     */
     private void validarCampo(String valor, String nombreCampo) {
         if (valor == null || valor.isBlank()) {
             throw new IllegalArgumentException("El campo " + nombreCampo + " es obligatorio");
         }
     }
 
+    /**
+     * Ejecuta la operación «aplicar datos» para formación.
+     * @param formacion
+     * @param datos
+     */
     private void aplicarDatos(Formacion formacion, FormacionRequestDto datos) {
         formacion.setTitulo(datos.titulo());
         formacion.setCentro(datos.centro());
@@ -107,6 +150,11 @@ public class FormacionServiceImpl implements FormacionService {
         formacion.setEnCurso(datos.enCurso());
     }
 
+    /**
+     * Ejecuta la operación «map to respuesta DTO» para formación.
+     * @param formacion
+     * @return resultado obtenido al ejecutar la operación.
+     */
     private FormacionResponseDto mapToResponseDto(Formacion formacion) {
         return new FormacionResponseDto(
                 formacion.getIdFormacion(),
